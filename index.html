@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Phi-3 Chatbot</title>
+
+<style>
+body { background:#0d1117;color:white;font-family:Arial;max-width:800px;margin:auto;padding:20px }
+#chat{height:70vh;overflow-y:auto;border:1px solid #333;padding:10px}
+.user{color:#4cd3ff;margin:8px 0}
+.bot{color:#51ff9d;margin:8px 0}
+input{width:80%;padding:10px}
+button{padding:10px}
+</style></head>
+
+<body>
+
+<h2>🤖 Phi-3 AI Chat</h2>
+
+<div id="chat"></div>
+
+<input id="msg" placeholder="Type message...">
+<button onclick="send()">Send</button>
+
+<script>
+async function send(){
+  const box=document.getElementById("msg");
+  const text = box.value;
+  if(!text) return;
+
+  const chat=document.getElementById("chat");
+  chat.innerHTML+=`<div class='user'>You: ${text}</div>`;
+  box.value="";
+
+  const res = await fetch("/chat",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({message:text})
+  });
+
+  const data = await res.json();
+
+  chat.innerHTML+=`<div class='bot'>AI: ${data.reply}</div>`;
+  chat.scrollTop = chat.scrollHeight;
+}
+</script>
+
+</body>
+</html>
