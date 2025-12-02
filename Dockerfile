@@ -9,11 +9,11 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 COPY requirements.txt .
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-COPY server.py .
-COPY index.html .
+COPY app.py .
 
 EXPOSE 10000
 
-CMD uvicorn server:app --host 0.0.0.0 --port 10000
+CMD streamlit run app.py --server.port=10000 --server.address=0.0.0.0
